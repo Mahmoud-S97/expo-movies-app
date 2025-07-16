@@ -6,13 +6,13 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { Link } from "expo-router";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
 import SearchBar from "../components/SearchBar";
 import { useRouter } from "expo-router";
 import { fetchMovies } from "@/services/api";
 import useFetch from "@/services/useFetch";
+import MovieCard from "../components/MovieCard";
 
 const Index = () => {
   const router = useRouter();
@@ -53,7 +53,7 @@ const Index = () => {
               <FlatList
                 data={movies}
                 renderItem={({ item }) => (
-                  <Text className="text-white text-small">{item.title}</Text>
+                  <MovieCard {...item} />
                 )}
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={3}
@@ -61,8 +61,7 @@ const Index = () => {
                   justifyContent: 'flex-start',
                   gap: 20,
                   paddingRight: 5,
-                  marginBottom: 10,
-                  flexWrap: 'wrap'
+                  marginBottom: 10
                 }}
                 className="mt-2 pb-32"
                 scrollEnabled={false}
