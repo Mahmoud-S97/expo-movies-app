@@ -39,12 +39,16 @@ const Index = () => {
         {moviesLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : moviesError ? (
-          <Text>Error: {moviesError?.message}</Text>
+          <Text className="text-red-500 px-5 my-3">
+            Error: {moviesError?.message}
+          </Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar
               onPress={() => router.push("/search")}
               placeholder="Search for a movie"
+              value=""
+              onChangeText={() => {}}
             />
             <>
               <Text className="text-lg text-white font-bold mt-5 mb-3">
@@ -52,16 +56,14 @@ const Index = () => {
               </Text>
               <FlatList
                 data={movies}
-                renderItem={({ item }) => (
-                  <MovieCard {...item} />
-                )}
+                renderItem={({ item }) => <MovieCard {...item} />}
                 keyExtractor={(item) => item.id.toString()}
                 numColumns={3}
                 columnWrapperStyle={{
-                  justifyContent: 'flex-start',
+                  justifyContent: "flex-start",
                   gap: 20,
                   paddingRight: 5,
-                  marginBottom: 10
+                  marginBottom: 10,
                 }}
                 className="mt-2 pb-32"
                 scrollEnabled={false}
