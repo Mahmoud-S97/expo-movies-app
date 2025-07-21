@@ -12,9 +12,6 @@ const client = new Client()
 const database = new Databases(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
-  console.log("Passed-Query: ", query);
-  console.log("Movie: ", movie);
-
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.equal("searchTerm", query),
@@ -22,7 +19,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
 
     if (result.documents.length > 0) {
       const existingMovie = result.documents[0];
-      console.log("Doc is exists!: ", existingMovie);
 
       await database.updateDocument(
         DATABASE_ID,
@@ -33,23 +29,30 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         }
       );
     } else {
-      const newMovie = await database.createDocument(
-        DATABASE_ID,
-        COLLECTION_ID,
-        ID.unique(),
-        {
-          movie_id: movie.id,
-          title: movie.title,
-          searchTerm: query,
-          count: 1,
-          poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        }
-      );
-      console.log("Created new doc: ", newMovie);
+      await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
+        movie_id: movie.id,
+        title: movie.title,
+        searchTerm: query,
+        count: 1,
+        poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+      });
     }
-    console.log("Query-Result: ", result);
   } catch (error) {
     console.log("Appwrite Docs Error: ", error);
     throw error;
+  }
+};
+
+export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> => {
+  try {
+    const results = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+        Query.limit(5),
+        Query.orderDesc('count')
+    ]);
+    console.log('Tresnding Movies:: ', results.documents);
+    return results.documents as unknown as TrendingMovie[];
+  } catch (error) {
+    console.log(error);
+    return undefined;
   }
 };
