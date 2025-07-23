@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -11,6 +11,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import { icons } from "@/constants/icons";
+import { saveMovie as saveVisitedMovieAsFavorite } from "@/services/appwrite";
 
 interface MovieInfoProps {
   label: string;
@@ -33,6 +34,12 @@ const MovieDetails = () => {
     loading,
     error,
   } = useFetch(() => fetchMovieDetails(id as string));
+
+  useEffect(() => {
+    if (movie) {
+      saveVisitedMovieAsFavorite(movie);
+    }
+  }, [movie]);
 
   return (
     <View className="flex-1 bg-primary">
