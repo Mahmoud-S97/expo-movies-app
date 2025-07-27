@@ -36,7 +36,7 @@ const Index = () => {
         style: "destructive",
         onPress: async () => {
           await deleteAllSavedMovies();
-          refetch()
+          refetch();
         },
       },
     ]);
@@ -73,7 +73,8 @@ const Index = () => {
                   Saved Movies
                 </Text>
                 <TouchableOpacity
-                  className="flex-row justify-center items-center"
+                  activeOpacity={0.5}
+                  className="flex-row justify-center items-center p-2"
                   onPress={confirmDeleteAllSavedMovies}
                 >
                   <Text className="text-red-500 text-normal">Delete All</Text>

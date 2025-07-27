@@ -56,44 +56,49 @@ const Index = () => {
             <SearchBar
               onPress={() => router.push("/search")}
               placeholder="Search for a movie"
+              editable={false}
             />
-            {trendingMovies && (
-              <View className="mt-10">
-                <Text className="text-lg text-white font-bold mt-5 mb-3">
-                  Trending Movies
-                </Text>
-              </View>
+            {trendingMovies && trendingMovies.length > 0 && (
+              <>
+                <View className="mt-10">
+                  <Text className="text-lg text-white font-bold mt-5 mb-3">
+                    Trending Movies
+                  </Text>
+                </View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  ItemSeparatorComponent={() => <View className="w-4" />}
+                  data={trendingMovies}
+                  keyExtractor={(item) => item.movie_id.toString()}
+                  className="mb-4 mt-3"
+                  renderItem={({ item, index }) => (
+                    <TrendingCard movie={item} index={index} />
+                  )}
+                />
+              </>
             )}
-            <>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                ItemSeparatorComponent={() => <View className="w-4" />}
-                data={trendingMovies}
-                keyExtractor={(item) => item.movie_id.toString()}
-                className="mb-4 mt-3"
-                renderItem={({ item, index }) => (
-                  <TrendingCard movie={item} index={index} />
-                )}
-              />
-              <Text className="text-lg text-white font-bold mt-5 mb-3">
-                Latest Movies
-              </Text>
-              <FlatList
-                data={movies}
-                renderItem={({ item }) => <MovieCard {...item} />}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={3}
-                columnWrapperStyle={{
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  paddingRight: 5,
-                  marginBottom: 10,
-                }}
-                className="mt-2 pb-32"
-                scrollEnabled={false}
-              />
-            </>
+            {movies && movies.length > 0 && (
+              <>
+                <Text className="text-lg text-white font-bold mt-5 mb-3">
+                  Latest Movies
+                </Text>
+                <FlatList
+                  data={movies}
+                  renderItem={({ item }) => <MovieCard {...item} />}
+                  keyExtractor={(item) => item.id.toString()}
+                  numColumns={3}
+                  columnWrapperStyle={{
+                    justifyContent: "flex-start",
+                    gap: 20,
+                    paddingRight: 5,
+                    marginBottom: 10,
+                  }}
+                  className="mt-2 pb-32"
+                  scrollEnabled={false}
+                />
+              </>
+            )}
           </View>
         )}
       </ScrollView>

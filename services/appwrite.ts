@@ -60,10 +60,15 @@ export const getTrendingMovies = async (): Promise<
     const results = await database.listDocuments(
       DATABASE_ID,
       COLLECTION_METRICS_ID,
-      [Query.limit(5), Query.orderDesc("count")]
+      [Query.limit(10), Query.orderDesc("count")]
     );
     console.log("Tresnding Movies:: ", results.documents);
-    return results.documents as unknown as TrendingMovie[];
+    const filteredRes = Array.from(
+      new Map(
+        results.documents.map((movie) => [movie.movie_id, movie])
+      ).values()
+    );
+    return filteredRes as unknown as TrendingMovie[];
   } catch (error) {
     console.log(error);
     return undefined;
@@ -114,42 +119,52 @@ export const saveMovie = async (movie: MovieDetails) => {
 
 export const getSavedMovies = async (): Promise<SavedMovie[] | undefined> => {
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_SAVED_MOVIES_ID, [
-      Query.greaterThanEqual('clicks_counter', 3),
-      Query.orderDesc('clicks_counter')
-    ]);
-    console.log('Limited-Saved-Movies:: ', result.documents);
+    const result = await database.listDocuments(
+      DATABASE_ID,
+      COLLECTION_SAVED_MOVIES_ID,
+      [
+        Query.greaterThanEqual("clicks_counter", 3),
+        Query.orderDesc("clicks_counter"),
+      ]
+    );
+    console.log("Limited-Saved-Movies:: ", result.documents);
     return result.documents as unknown as SavedMovie[];
   } catch (error) {
-    console.log('Error in fetching saved movies: ', error);
+    console.log("Error in fetching saved movies: ", error);
     throw error;
   }
-}
+};
 
 const getAllSavedMovies = async () => {
-   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_SAVED_MOVIES_ID, []);
+  try {
+    const result = await database.listDocuments(
+      DATABASE_ID,
+      COLLECTION_SAVED_MOVIES_ID,
+      []
+    );
     return result.documents;
-    } catch (error) {
-    console.log('Error in deleting saved movies', error);
+  } catch (error) {
+    console.log("Error in deleting saved movies", error);
     throw error;
   }
-}
+};
 
 export const deleteAllSavedMovies = async () => {
-  
   const fetchAllDocs = await getAllSavedMovies();
 
-    if(fetchAllDocs && fetchAllDocs.length > 0) {
-      for(const doc of fetchAllDocs) {
-        try {
-          await database.deleteDocument(DATABASE_ID, COLLECTION_SAVED_MOVIES_ID, doc.$id);
-          console.log(`Deleted document id: ${doc.movie_id}`);
-        } catch (error) {
-          console.log(`Error while deleting document: ${doc.movie_id} : `, error);
-          throw error;
-        }
+  if (fetchAllDocs && fetchAllDocs.length > 0) {
+    for (const doc of fetchAllDocs) {
+      try {
+        await database.deleteDocument(
+          DATABASE_ID,
+          COLLECTION_SAVED_MOVIES_ID,
+          doc.$id
+        );
+        console.log(`Deleted document id: ${doc.movie_id}`);
+      } catch (error) {
+        console.log(`Error while deleting document: ${doc.movie_id} : `, error);
+        throw error;
       }
     }
- 
-}
+  }
+};

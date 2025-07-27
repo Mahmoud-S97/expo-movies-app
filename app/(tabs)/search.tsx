@@ -26,7 +26,6 @@ const Search = () => {
   );
 
   useEffect(() => {
-
     const queryTimeout = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();
@@ -39,7 +38,7 @@ const Search = () => {
   }, [searchQuery]);
 
   useEffect(() => {
-    if (movies?.length > 0 && movies?.[0]) {
+    if (movies && movies?.length > 0 && movies?.[0]) {
       updateSearchCount(searchQuery, movies[0]);
     }
   }, [movies]);
@@ -75,6 +74,7 @@ const Search = () => {
                 placeholder="Search movies..."
                 value={searchQuery}
                 onChangeText={(text: string) => setSearchQuery(text)}
+                autoFocus={true}
               />
             </View>
             {loading && (
@@ -89,12 +89,16 @@ const Search = () => {
                 Error: {error.message}
               </Text>
             )}
-            {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
-              <Text className="text-xl text-white font-bold">
-                Search Results for{" "}
-                <Text className="text-accent">{searchQuery}</Text>
-              </Text>
-            )}
+            {!loading &&
+              !error &&
+              searchQuery.trim() &&
+              movies &&
+              movies?.length > 0 && (
+                <Text className="text-xl text-white font-bold">
+                  Search Results for{" "}
+                  <Text className="text-accent">{searchQuery}</Text>
+                </Text>
+              )}
           </>
         }
         ListEmptyComponent={
