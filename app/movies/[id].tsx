@@ -6,12 +6,14 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import useFetch from "@/services/useFetch";
 import { fetchMovieDetails } from "@/services/api";
 import { icons } from "@/constants/icons";
 import { saveMovie as saveVisitedMovieAsFavorite } from "@/services/appwrite";
+import AppIcon from "../components/Icon";
 
 interface MovieInfoProps {
   label: string;
@@ -58,13 +60,21 @@ const MovieDetails = () => {
         ) : (
           <>
             <View>
-              <Image
+              <ImageBackground
                 source={{
                   uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}`,
                 }}
                 className="w-full h-[550]"
                 resizeMode="stretch"
-              />
+              >
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  className="flex-row justify-center items-center w-[40] h-[40] mt-[60] ml-8 px-1 py-1 bg-accentOverlay rounded-full"
+                  onPress={router.back}
+                >
+                  <AppIcon family='FontAwesome' name="chevron-left" color={"#FFFFFF"} />
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
             <View className="flex-col items-start justify-center mt-5 px-5">
               <Text className="text-white text-xl font-bold">
@@ -122,17 +132,6 @@ const MovieDetails = () => {
           </>
         )}
       </ScrollView>
-      <TouchableOpacity
-        onPress={router.back}
-        className="py-3.5 absolute flex-row justify-center items-center rounded-lg bottom-5 left-0 right-0 mx-10 z-50 bg-accent"
-      >
-        <Image
-          source={icons.arrow}
-          className="size-5 mr-1 mt-0.5 rotate-180"
-          tintColor="#FFFFFF"
-        />
-        <Text className="text-white text-base font-semibold">Go back</Text>
-      </TouchableOpacity>
     </View>
   );
 };
