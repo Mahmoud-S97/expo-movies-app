@@ -1,6 +1,7 @@
 export const TMDB_CONFIG = {
   BASE_URL: "https://api.themoviedb.org/3",
   API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
+  ACCOUNT_ID: process.env.EXPO_PUBLIC_ACCOUNT_ID,
   headers: {
     accept: "application/json",
     Authorization: `Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`,
@@ -44,6 +45,25 @@ export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> 
 
   } catch (error) {
     console.log('Error in fetching movie details: ', error);
+    throw error;
+  }
+}
+
+export const getAccountDetails = async (): Promise<AccountDetails | undefined> => {
+  try {
+    const endPoint = `${TMDB_CONFIG.BASE_URL}/account/${TMDB_CONFIG.ACCOUNT_ID}`;
+
+    const response = await fetch(endPoint, {
+        method: 'GET',
+        headers: TMDB_CONFIG.headers
+    });
+
+    const data = await response.json();
+    console.log('Profile-Data:: ', data);
+    return data;
+
+  } catch (error) {
+    console.log('Error occurred while fetching Account Details: ', error);
     throw error;
   }
 }

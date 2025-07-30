@@ -91,3 +91,20 @@ interface SavedMovieCardProps {
   vote_average: number;
   release_date: string
 }
+
+interface AccountDetails {
+   avatar: {
+    gravatar: {
+      hash: string
+    },
+    tmdb: {
+      avatar_path: string | null
+    }
+  } | null,
+  id: number,
+  iso_639_1: string,
+  iso_3166_1: string,
+  name: string,
+  include_adult: boolean,
+  username: string
+}
