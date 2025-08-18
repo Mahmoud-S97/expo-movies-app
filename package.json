@@ -9,7 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest --watchAll"
+    "test": "jest --watch"
   },
   "jest": {
     "preset": "jest-expo",
@@ -21,6 +21,7 @@
     ],
     "moduleNameMapper": {
       "expo-router": "<rootDir>/__mocks__/expo-router.tsx",
+      "^@react-native-masked-view/masked-view$": "<rootDir>/__mocks__/@react-native-masked-view/masked-view.tsx",
       "\\.css$": "identity-obj-proxy"
     }
   },
